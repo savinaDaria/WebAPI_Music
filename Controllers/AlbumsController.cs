@@ -79,6 +79,13 @@ namespace SavinaMusicLab.Controllers
         [HttpPost]
         public async Task<ActionResult<Album>> PostAlbum(Album album)
         {
+            var band=_context.Bands.Where(b=>b.Id==album.BandId).ToList().Count();
+            if(band==0)
+            {
+                return NotFound();
+            }
+            var albums = _context.Albums.Where(sg => sg.Name == album.Name && sg.BandId == album.BandId && sg.Year == album.Year).Include(sg => sg.Band).ToList().Count();
+            if (albums != 0) return BadRequest("Альбом з такою назвою, групою та роком вже існує");
             _context.Albums.Add(album);
             await _context.SaveChangesAsync();
 

@@ -73,15 +73,31 @@ namespace SavinaMusicLab.Controllers
             return NoContent();
         }
 
+   
         // POST: api/Artists
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Artist>> PostArtist(Artist artist)
         {
+            var country = _context.Countries.Where(b => b.Id == artist.CountryId).ToList().Count();
+            var band=_context.Bands.Where(b=>b.Id==artist.BandId).ToList().Count();
+            if (country == 0 || band==0)
+            {
+                return NotFound();
+            }
+            var artists = _context.Artists.Where(sg => sg.Name == artist.Name && sg.BandId==artist.BandId && sg.DateofBirth==artist.DateofBirth && sg.DateofDeath == artist.DateofDeath && sg.CountryId == artist.CountryId).Include(sg => sg.Band).Include(sg => sg.Country).ToList().Count();
+            if (artists != 0) return BadRequest("Виконавець з таким ім'ям , групою, датою народження(смерті) ,країною вже існує");
+            string birth = artist.DateofBirth;
+            string death = artist.DateofDeath;
+            string[] wordsB = birth.Split('.');
+            if(death!=null)
+            { string[] wordsD = death.Split('.');
+                if ((Convert.ToInt32(wordsD[2]) - Convert.ToInt32(wordsB[2])) < 16)
+                {return BadRequest("Дата смерті актора не може бути більше дати народження"); }
+            }
             _context.Artists.Add(artist);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
         }
 

@@ -79,6 +79,8 @@ namespace SavinaMusicLab.Controllers
         [HttpPost]
         public async Task<ActionResult<Country>> PostCountry(Country country)
         {
+            var countries = _context.Countries.Where(sg => sg.Name == country.Name).ToList().Count();
+            if (countries != 0) return BadRequest("Країна з такою назвою вже існує");
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();
 

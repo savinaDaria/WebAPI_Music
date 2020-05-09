@@ -79,6 +79,8 @@ namespace SavinaMusicLab.Controllers
         [HttpPost]
         public async Task<ActionResult<Genre>> PostGenre(Genre genre)
         {
+            var genres = _context.Genres.Where(sg => sg.Name == genre.Name).ToList().Count();
+            if (genres != 0) return BadRequest("Жанр з такою назвою вже існує");
             _context.Genres.Add(genre);
             await _context.SaveChangesAsync();
 

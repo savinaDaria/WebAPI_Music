@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SavinaMusicLab.Models
@@ -19,12 +20,15 @@ namespace SavinaMusicLab.Models
         [Required(ErrorMessage = "Поле не повинно бути порожнім")]
         public string Name { get; set; }
         [Display(Name = "Рік виходу альбому")]
-        [Range(1600, 2020, ErrorMessage = "Уведіть рік від 1600 до поточного")]
+        [Range(1800, 2020, ErrorMessage = "Уведіть рік від 1800 до поточного")]
         public int? Year { get; set; }
 
         public int BandId { get; set; }
+
+        [JsonIgnore]
         [Display(Name = "Група")]
         public virtual Band Band { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Song> Songs { get; set; }
     }
 }

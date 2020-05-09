@@ -79,6 +79,14 @@ namespace SavinaMusicLab.Controllers
         [HttpPost]
         public async Task<ActionResult<SongGenre>> PostSongGenre(SongGenre songGenre)
         {
+            var genre = _context.Genres.Where(b => b.Id == songGenre.GenreId).ToList().Count();
+            var song = _context.Songs.Where(b => b.Id == songGenre.SongId).ToList().Count();
+            if (genre == 0 || song == 0)
+            {
+                return NotFound();
+            }
+            var songGenres = _context.SongGenres.Where(sg => sg.GenreId == songGenre.GenreId && sg.SongId == songGenre.SongId).Include(sg => sg.Song).Include(sg => sg.Genre).ToList().Count();
+            if (songGenres != 0) return BadRequest("Пісня з таким жанром вже існує");
             _context.SongGenres.Add(songGenre);
             await _context.SaveChangesAsync();
 

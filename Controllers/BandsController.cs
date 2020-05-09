@@ -79,6 +79,13 @@ namespace SavinaMusicLab.Controllers
         [HttpPost]
         public async Task<ActionResult<Band>> PostBand(Band band)
         {
+            var country = _context.Countries.Where(b => b.Id == band.CountryId).ToList().Count();
+            if (country == 0)
+            {
+                return NotFound();
+            }
+            var bands = _context.Bands.Where(sg => sg.Name == band.Name && sg.Year == band.Year && sg.CountryId==band.CountryId).Include(sg => sg.Country).ToList().Count();
+            if (bands != 0) return BadRequest("Група з таким роком створення,країною і назвою вже існує");
             _context.Bands.Add(band);
             await _context.SaveChangesAsync();
 
@@ -103,10 +110,6 @@ namespace SavinaMusicLab.Controllers
             }
             var artist = _context.Artists.Where(a => a.BandId == id).ToList();
             _context.Artists.RemoveRange(artist);
-            if (album == null)
-            {
-                return NotFound();
-            }
 
             _context.Albums.RemoveRange(album);
             if (band == null)
