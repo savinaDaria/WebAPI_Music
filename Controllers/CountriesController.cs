@@ -83,7 +83,6 @@ namespace SavinaMusicLab.Controllers
             if (countries != 0) return BadRequest("Країна з такою назвою вже існує");
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetCountry", new { id = country.Id }, country);
         }
 
