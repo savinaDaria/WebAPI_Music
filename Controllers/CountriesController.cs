@@ -84,6 +84,7 @@ namespace SavinaMusicLab.Controllers
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetCountry", new { id = country.Id }, country);
+            
         }
 
         // DELETE: api/Countries/5
