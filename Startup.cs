@@ -21,7 +21,7 @@ namespace SavinaMusicLab
         {
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<SavinaMusicContext> (options => options.UseSqlServer(connection));
+            services.AddDbContext<SavinaMusicContext>(options => options.UseSqlServer(connection));
             services.AddControllers();
         }
 
@@ -31,6 +31,8 @@ namespace SavinaMusicLab
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
