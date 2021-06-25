@@ -1,4 +1,4 @@
-# lab2_2Semestr
+# lab2_2Semestr WEB API_MUSIC
 # Application for searching information about music which was created as a part of university lab
 
 ## Technologies
